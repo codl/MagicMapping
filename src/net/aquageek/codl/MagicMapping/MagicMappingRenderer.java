@@ -164,7 +164,6 @@ public class MagicMappingRenderer implements Runnable {
 		BufferedImage image = new BufferedImage(16*6+16*6-1, 128*6 +6 + 2*3*15, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D graphics = image.createGraphics();
 		graphics.setBackground(new Color(33,33,33,0));
-		graphics.setPaint(new Color(64, 128, 172));
 		for(int z=0; z<16; z++) {
 			for(int x=15; x>=0; x--){
 				for(int y=0; y<128; y++){
