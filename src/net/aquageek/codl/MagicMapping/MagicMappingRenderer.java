@@ -66,37 +66,99 @@ public class MagicMappingRenderer implements Runnable {
 	}
 	private void drawOutline(int x, int y, Graphics2D graphics, double dsize, Block block) {
 		int size = (int) (dsize*6);
-		graphics.setPaint(new Color(0,0,0,10));
 		boolean continueLeft = true;
 		boolean continueRight = true;
-		boolean continueBottom = true;
+		boolean continueTopLeft = true;
+		boolean continueTopRight = true;
+		boolean continueBotLeft = true;
+		boolean continueBotRight = true;
 		int i = 0;
-		while (continueLeft == true || continueRight == true || continueBottom == true){
-			if(block.getRelative(0+i,0-i,-1-i).getType() == Material.AIR && continueLeft) {
-				graphics.fill(new Rectangle(x+5, y-1+6-size, 1, 1)); 
-				graphics.fill(new Rectangle(x+3, y+6-size, 2, 1));
-				graphics.fill(new Rectangle(x+1, y+1+6-size, 2, 1));
-				graphics.fill(new Rectangle(x, y+2+6-size, 1, 1));
-				graphics.fill(new Rectangle(x-1, y+3+6-size, 1, size));
-			} else { continueLeft = false; }
+		while (
+				i < 256 && (
+					continueLeft == true ||
+					continueRight == true ||
+					continueTopLeft == true ||
+					continueTopRight == true ||
+					continueBotLeft == true ||
+					continueTopRight == true
+					)
+				){
+			Block centerblock = block.getRelative(i, -i, -i);
+			if (!isTransparent(centerblock.getRelative(-1, 0, 0).getType())){
+				continueLeft = false;
+				continueBotLeft = false;
+			}
+			if (!isTransparent(centerblock.getRelative(-1, -1, 0).getType())){
+				continueBotLeft = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, -1, 0).getType())){
+				continueBotLeft = false;
+				continueBotRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, -1, 1).getType())){
+				continueBotRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, 0, 1).getType())){
+				continueBotRight = false;
+				continueRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(1, 0, 1).getType())){
+				continueRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(1, 0, 0).getType())){
+				continueRight = false;
+				continueTopRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(1, 1, 0).getType())){
+				continueTopRight = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, 1, 0).getType())){
+				continueTopRight = false;
+				continueTopLeft = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, 1, -1).getType())){
+				continueTopLeft = false;
+			}
+			if (!isTransparent(centerblock.getRelative(0, 0, -1).getType())){
+				continueTopLeft = false;
+				continueLeft = false;
+			}
+			if (!isTransparent(centerblock.getRelative(-1, 0, -1).getType())){
+				continueLeft = false;
+			}
 			
-			if(block.getRelative(1+i,0-i,0-i).getType() == Material.AIR && continueRight) {
-				graphics.fill(new Rectangle(x+5, y-1+6-size, 1, 1));
-				graphics.fill(new Rectangle(x+6, y+6-size, 2, 1));
-				graphics.fill(new Rectangle(x+8, y+1+6-size, 2, 1));
-				graphics.fill(new Rectangle(x+10, y+2+6-size, 1, 1));
-				graphics.fill(new Rectangle(x+11, y+3+6-size, 1, size));
-			} else { continueRight = false; }
+			graphics.setPaint(new Color(0, 0, 0, 120/i));
+			if(continueLeft){
+				graphics.fill(new Rectangle(x-1, y+3, 6, 1));
+			}
+			if(continueRight){
+				graphics.fill(new Rectangle(x+12, y+3, 6, 1));
+			}
+			if(continueTopLeft){
+				graphics.fill(new Rectangle(x+2, y+0, 1, 1));
+				graphics.fill(new Rectangle(x+1, y+1, 2, 1));
+				graphics.fill(new Rectangle(x+0, y+3, 2, 1));
+				graphics.fill(new Rectangle(x-1, y+5, 1, 1));
+			}
+			if(continueTopRight){
+				graphics.fill(new Rectangle(x-1, y+6, 1, 1));
+				graphics.fill(new Rectangle(x+0, y+7, 2, 1));
+				graphics.fill(new Rectangle(x+1, y+9, 2, 1));
+				graphics.fill(new Rectangle(x+2, y+11, 1, 1));
+			}
+			if(continueBotLeft){
+				graphics.fill(new Rectangle(x+9, y+0, 1, 1));
+				graphics.fill(new Rectangle(x+10, y+1, 2, 1));
+				graphics.fill(new Rectangle(x+11, y+3, 2, 1));
+				graphics.fill(new Rectangle(x+12, y+5, 1, 1));
+			}
+			if(continueBotRight){
+				graphics.fill(new Rectangle(x+12, y+6, 1, 1));
+				graphics.fill(new Rectangle(x+11, y+7, 2, 1));
+				graphics.fill(new Rectangle(x+10, y+9, 2, 1));
+				graphics.fill(new Rectangle(x+9, y+11, 1, 1));
+			}
 			
-			if(block.getRelative(0+i,-1-i,0-i).getType() == Material.AIR && continueBottom) {
-				graphics.fill(new Rectangle(x+5, y+12, 1, 1));
-				graphics.fill(new Rectangle(x+3, y+11, 2, 1));
-				graphics.fill(new Rectangle(x+1, y+10, 2, 1));
-				graphics.fill(new Rectangle(x, y+9, 1, 1));
-				graphics.fill(new Rectangle(x+6, y+11, 2, 1));
-				graphics.fill(new Rectangle(x+8, y+10, 2, 1));
-				graphics.fill(new Rectangle(x+10, y+9, 1, 1));
-			} else { continueBottom = false; }
 			i++;
 		}
 	}
