@@ -513,12 +513,12 @@ public class MagicMappingRenderer implements Runnable {
 							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
-						else if (blockType == Material.AIR){
+						/*else if (blockType == Material.AIR){
 							// Do nothing
 						}
 						else {
 							System.out.println("MagicMapping: "+String.valueOf(blockType.getId())+" : BlockType unknown");
-						}
+						}*/
 					}
 				}
 			}
@@ -571,7 +571,7 @@ public class MagicMappingRenderer implements Runnable {
 		while(true){
 			while(!queue.isEmpty()){
 				try {
-		            Thread.sleep(500);
+		            Thread.sleep(1500);
 		        } catch (InterruptedException e) {
 		        }
 				int[] pos = queue.poll();
@@ -583,11 +583,11 @@ public class MagicMappingRenderer implements Runnable {
 				}
 				}
 			try {
-	            Thread.sleep(1000);
+	            Thread.sleep(2000);
 	        } catch (InterruptedException e) {
 	        }
 	        slowcounter++;
-		    if(!slowQueue.isEmpty() && slowcounter > 5){
+		    if(!slowQueue.isEmpty() && slowcounter > 30){
 		        try {
 		        	slowcounter=0;
 					int[] pos = slowQueue.removeLast();

@@ -68,21 +68,15 @@ public class MagicMapping extends JavaPlugin {
         
         pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Event.Priority.Monitor, this);
     	System.out.println("MagicMapping on");
-    	
+    	/*
     	for (int x=-5; x < 5; x++) {
         	for (int z=-5; z < 5; z++) {
-        		renderer.slowEnqueue(x, z);
+        		renderer.enqueue(x, z);
         	}
     	}
-    	/*
-    	for (int x=-2; x <= 2; x++) {
-        	for (int z=-2; z <= 2; z++) {
-        		renderer.slowEnqueue(x, z);
-        	}
-    	}*/
+    	*/
     }
     public void onDisable() {
-    	System.out.println("MagicMapping off");
 
     }
  /*   public boolean isDebugging(final Player player) {
