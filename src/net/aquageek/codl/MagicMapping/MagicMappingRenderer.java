@@ -182,20 +182,20 @@ public class MagicMappingRenderer implements Runnable {
 	}
 	private void drawLadder(int x, int y, Graphics2D graphics, byte orientation){
 		graphics.setPaint(new Color(150,118,84));
-		if(orientation == 3){ // North
-			graphics.fill(new Rectangle(x+7, y+5, 1, 6));
-			graphics.fill(new Rectangle(x+8, y+6, 1, 1));
-			graphics.fill(new Rectangle(x+8, y+9, 1, 1));
-			graphics.fill(new Rectangle(x+9, y+5, 1, 1));
-			graphics.fill(new Rectangle(x+9, y+8, 1, 1));
-			graphics.fill(new Rectangle(x+10, y+4, 1, 6));
-		} else if (orientation == 4){ // West
-			graphics.fill(new Rectangle(x+1, y+4, 1, 6));
+		if(orientation == 3){ // West
+			graphics.fill(new Rectangle(x+1, y+4, 1, 7));
 			graphics.fill(new Rectangle(x+2, y+5, 1, 1));
 			graphics.fill(new Rectangle(x+2, y+8, 1, 1));
-			graphics.fill(new Rectangle(x+3, y+6, 1, 1));
-			graphics.fill(new Rectangle(x+3, y+9, 1, 1));
-			graphics.fill(new Rectangle(x+4, y+5, 1, 6));
+			graphics.fill(new Rectangle(x+3, y+4, 1, 1));
+			graphics.fill(new Rectangle(x+3, y+7, 1, 1));
+			graphics.fill(new Rectangle(x+4, y+3, 1, 6));
+		} else if (orientation == 4){ // North
+			graphics.fill(new Rectangle(x+7, y+3, 1, 6));
+			graphics.fill(new Rectangle(x+8, y+4, 1, 1));
+			graphics.fill(new Rectangle(x+8, y+7, 1, 1));
+			graphics.fill(new Rectangle(x+9, y+8, 1, 1));
+			graphics.fill(new Rectangle(x+9, y+5, 1, 1));
+			graphics.fill(new Rectangle(x+10, y+4, 1, 7));
 		}
 	}
 	private void drawStairs(int x, int y, Graphics2D graphics, byte orientation){
@@ -314,14 +314,53 @@ public class MagicMappingRenderer implements Runnable {
 			break;
 		}
 	}
-	// N E S W
-	/*private void drawDoor(int x, int y, Graphics2D graphics, byte blockdata){
+	private void drawDoor(int x, int y, Graphics2D graphics, byte blockdata){
+		int orientation = 0;
+		int posx = x;
+		int posy = y;
+		if(blockdata%8 >= 4){
+			blockdata++;
+		}
 		switch(blockdata%4){
 		case 0: // North
-			int orientation = 0; // Oriented N-S
-			
+			orientation = 0; // Oriented N-S
+			posy = y+6;
+			break;
+		case 1: // East
+			orientation = 1; // Oriented E-W
+			posy = y+3;
+			break;
+		case 2: // South
+			orientation = 0; // Oriented N-S
+			posx = x+6;
+			posy = y+3;
+			break;
+		case 3: // West
+			orientation = 1; // Oriented E-W
+			posx = x+6;
+			posy = y+6;
+			break;
 		}
-	}*/
+		if(orientation == 0){
+			graphics.draw(new Rectangle(posx+0, posy-9, 1, 12));
+			graphics.draw(new Rectangle(posx+1, posy-8, 1, 12));
+			graphics.draw(new Rectangle(posx+2, posy-8, 1, 1));
+			graphics.draw(new Rectangle(posx+2, posy-3, 1, 7));
+			graphics.draw(new Rectangle(posx+3, posy-7, 1, 1));
+			graphics.draw(new Rectangle(posx+3, posy-2, 1, 7));
+			graphics.draw(new Rectangle(posx+4, posy-7, 1, 12));
+			graphics.draw(new Rectangle(posx+5, posy-6, 1, 12));
+		} else {
+			graphics.draw(new Rectangle(posx+5, posy-9, 1, 12));
+			graphics.draw(new Rectangle(posx+4, posy-8, 1, 12));
+			graphics.draw(new Rectangle(posx+3, posy-8, 1, 1));
+			graphics.draw(new Rectangle(posx+3, posy-3, 1, 7));
+			graphics.draw(new Rectangle(posx+2, posy-7, 1, 1));
+			graphics.draw(new Rectangle(posx+2, posy-2, 1, 7));
+			graphics.draw(new Rectangle(posx+1, posy-7, 1, 12));
+			graphics.draw(new Rectangle(posx+0, posy-6, 1, 12));
+		}
+	}
 	private boolean isTransparent(Material mat){
 		if (
 				isEmpty(mat) ||
@@ -330,7 +369,8 @@ public class MagicMappingRenderer implements Runnable {
 				mat == Material.GLASS ||
 				mat == Material.LEAVES ||
 				mat == Material.COBBLESTONE_STAIRS ||
-				mat == Material.WOOD_STAIRS){
+				mat == Material.WOOD_STAIRS ||
+				mat == Material.STEP){
 			return true;
 		} else { return false; }
 	}
@@ -376,6 +416,20 @@ public class MagicMappingRenderer implements Runnable {
 						else if(blockType == Material.LADDER){
 							byte orientation = block.getData();
 							drawLadder(picx, picy, graphics, orientation);
+						}
+						else if(blockType == Material.WOODEN_DOOR){
+							byte data = block.getData();
+							if(data < 8){
+								graphics.setPaint(new Color(207, 179, 124));
+								drawDoor(picx, picy, graphics, data);
+							}
+						}
+						else if(blockType == Material.IRON_DOOR_BLOCK){
+							byte data = block.getData();
+							if(data < 8){
+								graphics.setPaint(new Color(200,200,200));
+								drawDoor(picx, picy, graphics, data);
+							}
 						}
 						else if(blockType == Material.WOOD_STAIRS){
 							graphics.setPaint(new Color(207, 179, 124));
