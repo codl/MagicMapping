@@ -59,7 +59,6 @@ public class MagicMapping extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
-        new Thread(renderer).start();
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Monitor, this);
         //pm.registerEvent(Event.Type.BLOCK_FROMTO, blockListener, Event.Priority.Monitor, this); //Lava & water flow
@@ -67,14 +66,20 @@ public class MagicMapping extends JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Event.Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Event.Priority.Monitor, this);
-    	System.out.println("MagicMapping on");
-    	/*
-    	for (int x=-5; x < 5; x++) {
-        	for (int z=-5; z < 5; z++) {
+        
+        new Thread(renderer).start();
+    	
+        System.out.println("MagicMapping on");
+        
+        renderer.enqueue(-7,14);
+    	for (int x=-7; x <= -3; x++) {
+    		for (int z=12; z <= 16; z++) {
         		renderer.enqueue(x, z);
         	}
     	}
-    	*/
+    	
+    	
+    	
     }
     public void onDisable() {
 

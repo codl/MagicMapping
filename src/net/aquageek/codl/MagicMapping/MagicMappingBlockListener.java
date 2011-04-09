@@ -11,7 +11,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
  * @author codl
  */
 public class MagicMappingBlockListener extends BlockListener {
-    private final MagicMapping plugin;
+    @SuppressWarnings("unused")
+	private final MagicMapping plugin;
     private MagicMappingRenderer renderer;
 
     public MagicMappingBlockListener(final MagicMapping plugin, MagicMappingRenderer renderer) {
@@ -37,9 +38,9 @@ public class MagicMappingBlockListener extends BlockListener {
     
     @Override
     public void onBlockPhysics(BlockPhysicsEvent event){
-    /*	Chunk chunk = event.getBlock().getChunk();
+    	Chunk chunk = event.getBlock().getChunk();
     	int chunkx = chunk.getX();
     	int chunkz = chunk.getZ();
-    	renderer.slowEnqueue(chunkx, chunkz);*/	
+    	renderer.slowEnqueue(chunkx, chunkz);	
     }
 }

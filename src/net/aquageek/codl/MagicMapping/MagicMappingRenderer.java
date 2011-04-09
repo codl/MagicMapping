@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -38,26 +39,17 @@ public class MagicMappingRenderer implements Runnable {
 		graphics.fill(new Rectangle(x+3, y+10, 6, 1));
 		graphics.fill(new Rectangle(x+5, y+11, 2, 1));
 	}
-	private void drawHighlight(int x, int y, Graphics2D graphics) {
-		graphics.setPaint(new Color(255,255,255,5));
-		graphics.fill(new Rectangle(x+5,  y+6, 1, 5));
-		graphics.fill(new Rectangle(x+4,  y+5, 1, 6));
-		graphics.fill(new Rectangle(x+3,  y+5, 1, 5));
-		graphics.fill(new Rectangle(x+2,  y+4, 1, 6));
-		graphics.fill(new Rectangle(x+1, y+4, 1, 5));
-	}
-	private void drawHighlight(int x, int y, Graphics2D graphics, double dsize) {
-		int size = (int) (dsize*6);
-		graphics.setPaint(new Color(255,255,255,5));
-		graphics.fill(new Rectangle(x+5,  y+6+6-size, 1, size-1));
-		graphics.fill(new Rectangle(x+4,  y+5+6-size, 1, size));
-		graphics.fill(new Rectangle(x+3,  y+5+6-size, 1, size-1));
-		graphics.fill(new Rectangle(x+2,  y+4+6-size, 1, size));
-		graphics.fill(new Rectangle(x+1, y+4+6-size, 1, size-1));
-	}
 	private void drawShadow(int x, int y, Graphics2D graphics, double dsize) {
 		int size = (int) (dsize*6);
-		graphics.setPaint(new Color(0,0,0,5));
+		graphics.setPaint(new Color(0,0,0,15));
+		graphics.fill(new Rectangle(x+0,  y+3+6-size, 1, size));
+		graphics.fill(new Rectangle(x+1,  y+3+6-size, 1, size+1));
+		graphics.fill(new Rectangle(x+2,  y+4+6-size, 1, size));
+		graphics.fill(new Rectangle(x+3,  y+4+6-size, 1, size+1));
+		graphics.fill(new Rectangle(x+4,  y+5+6-size, 1, size));
+		graphics.fill(new Rectangle(x+5,  y+5+6-size, 1, size+1));
+
+		graphics.setPaint(new Color(0,0,0,10));
 		graphics.fill(new Rectangle(x+7,  y+6+6-size, 1, size-1));
 		graphics.fill(new Rectangle(x+8,  y+5+6-size, 1, size));
 		graphics.fill(new Rectangle(x+9,  y+5+6-size, 1, size-1));
@@ -80,11 +72,11 @@ public class MagicMappingRenderer implements Runnable {
 					continueTopLeft == true ||
 					continueTopRight == true ||
 					continueBotLeft == true ||
-					continueTopRight == true
+					continueBotRight == true
 					)
 				){
 			Block centerblock = block.getRelative(i, -i, -i);
-			if (i > 0 && !(centerblock.getType() == Material.AIR)){
+			if (i > 0 && !isEmpty(centerblock.getType())){
 				continueLeft = false;
 				continueRight = false;
 				continueTopLeft = false;
@@ -92,46 +84,46 @@ public class MagicMappingRenderer implements Runnable {
 				continueBotLeft = false;
 				continueTopRight = false;
 			}
-			if (!(centerblock.getRelative(-1, 0, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(-1, 0, 0).getType())){
 				continueLeft = false;
 				continueBotLeft = false;
 			}
-			if (!(centerblock.getRelative(-1, -1, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(-1, -1, 0).getType())){
 				continueBotLeft = false;
 			}
-			if (!(centerblock.getRelative(0, -1, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, -1, 0).getType())){
 				continueBotLeft = false;
 				continueBotRight = false;
 			}
-			if (!(centerblock.getRelative(0, -1, 1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, -1, 1).getType())){
 				continueBotRight = false;
 			}
-			if (!(centerblock.getRelative(0, 0, 1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, 0, 1).getType())){
 				continueBotRight = false;
 				continueRight = false;
 			}
-			if (!(centerblock.getRelative(1, 0, 1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(1, 0, 1).getType())){
 				continueRight = false;
 			}
-			if (!(centerblock.getRelative(1, 0, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(1, 0, 0).getType())){
 				continueRight = false;
 				continueTopRight = false;
 			}
-			if (!(centerblock.getRelative(1, 1, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(1, 1, 0).getType())){
 				continueTopRight = false;
 			}
-			if (!(centerblock.getRelative(0, 1, 0).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, 1, 0).getType())){
 				continueTopRight = false;
 				continueTopLeft = false;
 			}
-			if (!(centerblock.getRelative(0, 1, -1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, 1, -1).getType())){
 				continueTopLeft = false;
 			}
-			if (!(centerblock.getRelative(0, 0, -1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(0, 0, -1).getType())){
 				continueTopLeft = false;
 				continueLeft = false;
 			}
-			if (!(centerblock.getRelative(-1, 0, -1).getType() == Material.AIR)){
+			if (!isEmpty(centerblock.getRelative(-1, 0, -1).getType())){
 				continueLeft = false;
 			}
 			
@@ -188,33 +180,167 @@ public class MagicMappingRenderer implements Runnable {
 			graphics.fill(new Rectangle(x+orex, y+orey, 1+rand.nextInt(1), 1+rand.nextInt(1)));
 		}
 	}
-	private void drawFloorTorch(int x, int y, Graphics2D graphics){
-		graphics.setPaint(new Color(255, 200, 0));
-		graphics.fill(new Rectangle(x+5, y+6, 1, 1));
-		graphics.setPaint(new Color(207, 179, 124));
-		graphics.fill(new Rectangle(x+5, y+7, 1, 2));
+	private void drawLadder(int x, int y, Graphics2D graphics, byte orientation){
+		graphics.setPaint(new Color(150,118,84));
+		if(orientation == 3){ // North
+			graphics.fill(new Rectangle(x+7, y+5, 1, 6));
+			graphics.fill(new Rectangle(x+8, y+6, 1, 1));
+			graphics.fill(new Rectangle(x+8, y+9, 1, 1));
+			graphics.fill(new Rectangle(x+9, y+5, 1, 1));
+			graphics.fill(new Rectangle(x+9, y+8, 1, 1));
+			graphics.fill(new Rectangle(x+10, y+4, 1, 6));
+		} else if (orientation == 4){ // West
+			graphics.fill(new Rectangle(x+1, y+4, 1, 6));
+			graphics.fill(new Rectangle(x+2, y+5, 1, 1));
+			graphics.fill(new Rectangle(x+2, y+8, 1, 1));
+			graphics.fill(new Rectangle(x+3, y+6, 1, 1));
+			graphics.fill(new Rectangle(x+3, y+9, 1, 1));
+			graphics.fill(new Rectangle(x+4, y+5, 1, 6));
+		}
 	}
-	private void drawLeftSideTorch(int x, int y, Graphics2D graphics){
-		graphics.setPaint(new Color(255, 200, 0));
-		graphics.fill(new Rectangle(x+3, y+2, 1, 1));
-		graphics.setPaint(new Color(207, 179, 124));
-		graphics.fill(new Rectangle(x+3, y+3, 1, 1));
-		graphics.fill(new Rectangle(x+2, y+4, 1, 1));
+	private void drawStairs(int x, int y, Graphics2D graphics, byte orientation){
+		if(orientation == 0){ // South
+			graphics.fill(new Rectangle(x+0, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+1, y+5, 2, 5));
+			graphics.fill(new Rectangle(x+3, y+1, 2, 10));
+			graphics.fill(new Rectangle(x+5, y+0, 2, 12));
+			graphics.fill(new Rectangle(x+7, y+1, 2, 10));
+			graphics.fill(new Rectangle(x+9, y+2, 2, 8));
+			graphics.fill(new Rectangle(x+11, y+3, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,15));
+			graphics.fill(new Rectangle(x+0, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+1, y+7, 2, 3));
+			graphics.fill(new Rectangle(x+3, y+2, 2, 3));
+			graphics.fill(new Rectangle(x+3, y+8, 2, 3));
+			graphics.fill(new Rectangle(x+5, y+3, 2, 3));
+			graphics.fill(new Rectangle(x+5, y+9, 1, 3));
+			graphics.fill(new Rectangle(x+7, y+4, 2, 3));
+			
+			graphics.setPaint(new Color(0,0,0,10));
+			graphics.fill(new Rectangle(x+6, y+9, 1, 3));
+			graphics.fill(new Rectangle(x+7, y+8, 2, 3));
+			graphics.fill(new Rectangle(x+9, y+4, 2, 6));
+			graphics.fill(new Rectangle(x+11, y+3, 1, 6));
+		}
+		else if(orientation == 3){ // East
+			graphics.fill(new Rectangle(x+11, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+9, y+5, 2, 5));
+			graphics.fill(new Rectangle(x+7, y+1, 2, 10));
+			graphics.fill(new Rectangle(x+5, y+0, 2, 12));
+			graphics.fill(new Rectangle(x+3, y+1, 2, 10));
+			graphics.fill(new Rectangle(x+1, y+2, 2, 8));
+			graphics.fill(new Rectangle(x+0, y+3, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,15));
+			graphics.fill(new Rectangle(x+11, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+9, y+7, 2, 3));
+			graphics.fill(new Rectangle(x+7, y+2, 2, 3));
+			graphics.fill(new Rectangle(x+7, y+8, 2, 3));
+			graphics.fill(new Rectangle(x+5, y+3, 2, 3));
+			graphics.fill(new Rectangle(x+5, y+9, 1, 3));
+			graphics.fill(new Rectangle(x+4, y+4, 2, 3));
+			
+			graphics.setPaint(new Color(0,0,0,10));
+			graphics.fill(new Rectangle(x+5, y+9, 1, 3));
+			graphics.fill(new Rectangle(x+3, y+8, 2, 3));
+			graphics.fill(new Rectangle(x+1, y+4, 2, 6));
+			graphics.fill(new Rectangle(x+0, y+3, 1, 6));
+		}
+		else if (orientation == 2){ // West
+			graphics.fill(new Rectangle(x+0, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+1, y+5, 2, 5));
+			graphics.fill(new Rectangle(x+3, y+4, 2, 7));
+			graphics.fill(new Rectangle(x+5, y+3, 2, 9));
+			graphics.fill(new Rectangle(x+7, y+2, 2, 9));
+			graphics.fill(new Rectangle(x+9, y+2, 2, 8));
+			graphics.fill(new Rectangle(x+11, y+3, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,15));
+			graphics.fill(new Rectangle(x+0, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+1, y+7, 2, 3));
+			graphics.fill(new Rectangle(x+3, y+5, 2, 6));
+			graphics.fill(new Rectangle(x+5, y+6, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,10));
+			graphics.fill(new Rectangle(x+6, y+6, 1, 6));
+			graphics.fill(new Rectangle(x+7, y+5, 2, 6));
+			graphics.fill(new Rectangle(x+9, y+4, 2, 6));
+			graphics.fill(new Rectangle(x+11, y+3, 1, 6));
+		}
+		else if (orientation == 1){ // North
+			graphics.fill(new Rectangle(x+11, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+9, y+5, 2, 5));
+			graphics.fill(new Rectangle(x+7, y+4, 2, 7));
+			graphics.fill(new Rectangle(x+5, y+3, 2, 9));
+			graphics.fill(new Rectangle(x+3, y+2, 2, 9));
+			graphics.fill(new Rectangle(x+1, y+2, 2, 8));
+			graphics.fill(new Rectangle(x+0, y+3, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,15));
+			graphics.fill(new Rectangle(x+11, y+6, 1, 3));
+			graphics.fill(new Rectangle(x+9, y+7, 2, 3));
+			graphics.fill(new Rectangle(x+7, y+5, 2, 6));
+			graphics.fill(new Rectangle(x+6, y+6, 1, 6));
+			
+			graphics.setPaint(new Color(0,0,0,10));
+			graphics.fill(new Rectangle(x+5, y+6, 1, 6));
+			graphics.fill(new Rectangle(x+3, y+5, 2, 6));
+			graphics.fill(new Rectangle(x+1, y+4, 2, 6));
+			graphics.fill(new Rectangle(x+0, y+3, 1, 6));
+		}
 	}
-	private void drawRightSideTorch(int x, int y, Graphics2D graphics){
-		graphics.setPaint(new Color(255, 200, 0));
-		graphics.fill(new Rectangle(x+7, y+2, 1, 1));
-		graphics.setPaint(new Color(207, 179, 124));
-		graphics.fill(new Rectangle(x+7, y+3, 1, 1));
-		graphics.fill(new Rectangle(x+8, y+4, 1, 1));
+	private void drawTorch(int x, int y, Graphics2D graphics, byte orientation){
+		switch(orientation){
+		case 5:// Top
+			graphics.setPaint(new Color(255, 200, 0));
+			graphics.fill(new Rectangle(x+5, y+6, 1, 1));
+			graphics.setPaint(new Color(207, 179, 124));
+			graphics.fill(new Rectangle(x+5, y+7, 1, 2));
+			break;
+		case 2: // North
+			graphics.setPaint(new Color(255, 200, 0));
+			graphics.fill(new Rectangle(x+7, y+2, 1, 1));
+			graphics.setPaint(new Color(207, 179, 124));
+			graphics.fill(new Rectangle(x+7, y+3, 1, 1));
+			graphics.fill(new Rectangle(x+8, y+4, 1, 1));
+			break;
+		case 3: // West
+			graphics.setPaint(new Color(255, 200, 0));
+			graphics.fill(new Rectangle(x+3, y+2, 1, 1));
+			graphics.setPaint(new Color(207, 179, 124));
+			graphics.fill(new Rectangle(x+3, y+3, 1, 1));
+			graphics.fill(new Rectangle(x+2, y+4, 1, 1));
+			break;
+		}
 	}
+	// N E S W
+	/*private void drawDoor(int x, int y, Graphics2D graphics, byte blockdata){
+		switch(blockdata%4){
+		case 0: // North
+			int orientation = 0; // Oriented N-S
+			
+		}
+	}*/
 	private boolean isTransparent(Material mat){
 		if (
-				mat == Material.AIR ||
+				isEmpty(mat) ||
 				mat == Material.WATER ||
 				mat == Material.STATIONARY_WATER ||
 				mat == Material.GLASS ||
-				mat == Material.LEAVES){
+				mat == Material.LEAVES ||
+				mat == Material.COBBLESTONE_STAIRS ||
+				mat == Material.WOOD_STAIRS){
+			return true;
+		} else { return false; }
+	}
+	private boolean isEmpty(Material mat){
+		if (
+				mat == Material.AIR ||
+				mat == Material.LADDER ||
+				mat == Material.TORCH ||
+				mat == Material.BEDROCK //blocks with y>127 or y<0 are bedrock 
+				){
 			return true;
 		} else { return false; }
 	}
@@ -231,26 +357,35 @@ public class MagicMappingRenderer implements Runnable {
 		} else { return false; }
 	}
 	private void render(Chunk chunk) {
-		BufferedImage image = new BufferedImage(16*6+16*6-1, 128*6 +6 + 2*3*15, BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage image = new BufferedImage(16*6+16*6+2, 128*6 +6 + 2*3*15, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D graphics = image.createGraphics();
 		graphics.setBackground(new Color(33,33,33,0));
 		for(int z=0; z<16; z++) {
 			for(int x=15; x>=0; x--){
 				for(int y=0; y<128; y++){
+					///System.out.println(String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
 					Block block = chunk.getBlock(x, y, z);
-					if (isVisible(block)) {
+					if (x == 0 || z == 15 || isVisible(block)) {
 						Material blockType = block.getType();
-						int picx = x*6 + z*6;
+						int picx = x*6 + z*6 + 1;
 						int picy = (127-y)*6 + 3*15 + z*3 - x*3;
 						if(blockType == Material.TORCH){
 							byte orientation = block.getData();
-							if (orientation == 5) {
-								drawFloorTorch(picx, picy, graphics);
-							} else if (orientation == 2) {
-								drawRightSideTorch(picx, picy, graphics);
-							} else if (orientation == 3) {
-								drawLeftSideTorch(picx, picy, graphics);
-							}
+							drawTorch(picx, picy, graphics, orientation);
+						}
+						else if(blockType == Material.LADDER){
+							byte orientation = block.getData();
+							drawLadder(picx, picy, graphics, orientation);
+						}
+						else if(blockType == Material.WOOD_STAIRS){
+							graphics.setPaint(new Color(207, 179, 124));
+							byte orientation = block.getData();
+							drawStairs(picx, picy, graphics, orientation);
+						}
+						else if(blockType == Material.COBBLESTONE_STAIRS){
+							graphics.setPaint(new Color(120,120,120));
+							byte orientation = block.getData();
+							drawStairs(picx, picy, graphics, orientation);
 						}
 						else if(blockType == Material.WATER || blockType == Material.STATIONARY_WATER){
 							graphics.setPaint(new Color(45, 45, 230, 70)); //TODO add sloped water and lava
@@ -317,21 +452,18 @@ public class MagicMappingRenderer implements Runnable {
 							}
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.SNOW){
 							drawOutline( picx, picy, graphics, 0.2, block);
 							graphics.setPaint(new Color(255,255,255));
 							drawCube( picx, picy, graphics, 0.2);
 							drawShadow(picx, picy, graphics, 0.2);
-							drawHighlight(picx, picy, graphics, 0.2);
 						}
 						else if(blockType == Material.CACTUS){
 							drawOutline( picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(31,177,27));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics, 1);
 							graphics.setPaint(new Color(30,58,29));
 							drawOre(picx, picy, graphics, 1);
 						}
@@ -340,42 +472,36 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(255,255,255));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.ICE){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(150,255,255, 50));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.OBSIDIAN){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(30,10,30));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.DIAMOND_BLOCK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(100,255,255));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.IRON_BLOCK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(200,200,200));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.GOLD_BLOCK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(255,230,46));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.DIAMOND_ORE){
 							drawOutline(picx, picy, graphics, 1, block);
@@ -384,7 +510,6 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(100,255,255));
 							drawOre(picx, picy, graphics, 5);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.IRON_ORE){
 							drawOutline(picx, picy, graphics, 1, block);
@@ -393,7 +518,6 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(200,200,100));
 							drawOre(picx, picy, graphics, 8);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.COAL_ORE){
 							drawOutline(picx, picy, graphics, 1, block);
@@ -402,16 +526,14 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(30,30,30));
 							drawOre(picx, picy, graphics, 10);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.REDSTONE_ORE || blockType == Material.GLOWING_REDSTONE_ORE){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(100, 100, 100));
 							drawCube(picx, picy, graphics, 1);
-							graphics.setPaint(new Color(200,00,0));
+							graphics.setPaint(new Color(200,0,0));
 							drawOre(picx, picy, graphics, 8);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.GOLD_ORE){
 							drawOutline(picx, picy, graphics, 1, block);
@@ -420,105 +542,134 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(235,211,46));
 							drawOre(picx, picy, graphics, 5);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.TNT){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(236,33,17));
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.GLASS){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(255,255,255, 30));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 						}
 						else if(blockType == Material.WOOD){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(207, 179, 124));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.CLAY){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(197,189,160));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.BRICK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(125,0,0));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.LEAVES){
 							drawOutline(picx, picy, graphics, 1, block);
-							graphics.setPaint(new Color(0, 170, 0, 170));
+							graphics.setPaint(new Color(20, 130, 18));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.LOG){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(120, 70, 0));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.STONE){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(100, 100, 100));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
+						}
+						else if(blockType == Material.STEP){
+							drawOutline(picx, picy, graphics, 0.5, block);
+							
+							switch (block.getData()){
+							case 0: //Stone
+								graphics.setPaint(new Color(100, 100, 100));
+								break;
+							case 1: //Sandstone
+								graphics.setPaint(new Color(250, 250, 100));
+								break;
+							case 2: //Wood
+								graphics.setPaint(new Color(207, 179, 124));
+								break;
+							case 3: //Cobblestone
+								graphics.setPaint(new Color(120,120,120));
+								break;
+							}
+							
+							drawCube(picx, picy, graphics, 0.5);
+							drawShadow(picx, picy, graphics, 0.5);
+						}
+						else if(blockType == Material.DOUBLE_STEP){
+							drawOutline(picx, picy, graphics, 1, block);
+							
+							switch (block.getData()){
+							case 0: //Stone
+								graphics.setPaint(new Color(100, 100, 100));
+								break;
+							case 1: //Sandstone
+								graphics.setPaint(new Color(250, 250, 100));
+								break;
+							case 2: //Wood
+								graphics.setPaint(new Color(207, 179, 124));
+								break;
+							case 3: //Cobblestone
+								graphics.setPaint(new Color(120,120,120));
+								break;
+							}
+							
+							graphics.setPaint(new Color(100, 100, 100));
+							drawCube(picx, picy, graphics, 1);
+							drawShadow(picx, picy, graphics, 0.5);
+							drawShadow(picx, picy-3, graphics, 0.5);
 						}
 						else if(blockType == Material.COBBLESTONE){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(120, 120, 120));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.GRAVEL){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(120, 110, 110));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
-						else if(blockType == Material.SAND){
+						else if(blockType == Material.SAND || blockType == Material.SANDSTONE){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(250, 250, 100));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.BEDROCK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(50, 50, 50));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.DIRT){
 							drawOutline(picx, picy, graphics, 1, block);
-							graphics.setPaint(new Color(145, 93, 74));
+							graphics.setPaint(new Color(133, 100, 62));
 							drawCube(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.GRASS){
 							drawOutline(picx, picy, graphics, 1, block);
-							graphics.setPaint(new Color(145, 93, 74));
+							graphics.setPaint(new Color(133, 100, 62));
 							drawCube(picx, picy, graphics, 1);
 							graphics.setPaint(new Color(80, 229, 34));
 							drawTopFace(picx, picy, graphics, 1);
-							drawHighlight(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						/*else if (blockType == Material.AIR){
@@ -530,6 +681,10 @@ public class MagicMappingRenderer implements Runnable {
 					}
 				}
 			}
+			try {
+	            Thread.sleep(0, 1);
+			} catch (InterruptedException e) {
+	    	}
 		}
 		try {
 			File out = new File(plugin.output+File.separator+"chunks"+File.separator+String.valueOf(chunk.getX())+ "_" + String.valueOf(chunk.getZ())+ ".png");
@@ -562,6 +717,7 @@ public class MagicMappingRenderer implements Runnable {
 		int[] pos = {x, z};
 		if(!isIn(queue, pos)){
 			queue.add(pos);
+
 			slowcounter = 0;
 			return true;
 		} else {return false;}
@@ -577,33 +733,35 @@ public class MagicMappingRenderer implements Runnable {
 	@Override
 	public void run() {
 		while(true){
-			while(!queue.isEmpty()){
+			try {
+				while(!queue.isEmpty()){
+					try {
+			            Thread.sleep(1000);
+			        } catch (InterruptedException e) {
+			        }
+					int[] pos = queue.poll();
+					try {
+						slowcounter = 0;
+						Chunk chunk = this.plugin.world.getChunkAt(pos[0], pos[1]);
+						render(chunk);
+					} catch (NullPointerException e) {
+					}
+					}
 				try {
-		            Thread.sleep(1500);
+		            Thread.sleep(1000);
 		        } catch (InterruptedException e) {
 		        }
-				int[] pos = queue.poll();
-				try {
-					slowcounter = 0;
-					Chunk chunk = this.plugin.world.getChunkAt(pos[0], pos[1]);
-					render(chunk);
-				} catch (NullPointerException e) {
-				}
-				}
-			try {
-	            Thread.sleep(2000);
-	        } catch (InterruptedException e) {
-	        }
-	        slowcounter++;
-		    if(!slowQueue.isEmpty() && slowcounter > 30){
-		        try {
-		        	slowcounter=0;
-					int[] pos = slowQueue.removeLast();
-					Chunk chunk = this.plugin.world.getChunkAt(pos[0], pos[1]);
-					render(chunk);
-				} catch (NullPointerException e) {
-				}
-	        }
+		        slowcounter++;
+			    if(!slowQueue.isEmpty() && slowcounter > 30){
+			        try {
+			        	slowcounter=0;
+						int[] pos = slowQueue.removeLast();
+						Chunk chunk = this.plugin.world.getChunkAt(pos[0], pos[1]);
+						render(chunk);
+					} catch (NullPointerException e) {
+					}
+		        }
+			} catch (ConcurrentModificationException e){}
 		}
 	}
 }

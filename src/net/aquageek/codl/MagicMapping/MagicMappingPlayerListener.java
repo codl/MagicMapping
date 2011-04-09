@@ -2,7 +2,7 @@ package net.aquageek.codl.MagicMapping;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+//import org.bukkit.entity.Player;
 
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -22,7 +22,7 @@ public class MagicMappingPlayerListener extends PlayerListener {
     
     @Override
     public void onPlayerMove(PlayerMoveEvent e){
-    	Player player = e.getPlayer();
+    	//Player player = e.getPlayer();
     	Location l = e.getFrom();
     	int x = l.getBlockX();
     	int z = l.getBlockZ();
