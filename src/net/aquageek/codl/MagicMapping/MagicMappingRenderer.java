@@ -84,6 +84,14 @@ public class MagicMappingRenderer implements Runnable {
 					)
 				){
 			Block centerblock = block.getRelative(i, -i, -i);
+			if (i > 0 && !(centerblock.getType() == Material.AIR)){
+				continueLeft = false;
+				continueRight = false;
+				continueTopLeft = false;
+				continueTopRight = false;
+				continueBotLeft = false;
+				continueTopRight = false;
+			}
 			if (!(centerblock.getRelative(-1, 0, 0).getType() == Material.AIR)){
 				continueLeft = false;
 				continueBotLeft = false;
