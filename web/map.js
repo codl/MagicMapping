@@ -23,7 +23,7 @@ var loadchunk = function(x, z) {
         div.style.width = 191;
         div.style.left = (x + z) * 192/2;
         div.style.top = (z-x)*48;
-        div.style.zIndex = z-x;
+        div.style.zIndex = z-x+3000;
         chunks.appendChild(div);
     }
 }
