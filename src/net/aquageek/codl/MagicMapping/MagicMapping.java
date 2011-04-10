@@ -70,6 +70,11 @@ public class MagicMapping extends JavaPlugin {
         new Thread(renderer).start();
     	
         System.out.println("MagicMapping on");
+        /*for(int x=-2; x<= 1; x++){
+        	for(int z=4; z<= 6; z++){
+        		renderer.enqueue(x, z);
+        	}
+        }*/
     }
     public void onDisable() {
 

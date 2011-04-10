@@ -172,6 +172,12 @@ public class MagicMappingRenderer implements Runnable {
 		graphics.fill(new Rectangle(x+3, y+5+6-size, 6, 1));
 		graphics.fill(new Rectangle(x+5, y+6+6-size, 2, 1));
 	}
+	private void drawLogCircles(int x, int y, Graphics2D graphics){
+		graphics.setPaint(new Color(207, 179, 124));
+		graphics.fill(new Rectangle(x+3, y+2, 2, 2));
+		graphics.fill(new Rectangle(x+5, y+1, 2, 4));
+		graphics.fill(new Rectangle(x+7, y+2, 2, 2));
+	}
 	private void drawOre(int x, int y, Graphics2D graphics, int number){
 		Random rand = new Random();
 		for( int i = 0; i < number; i++) {
@@ -314,6 +320,11 @@ public class MagicMappingRenderer implements Runnable {
 			break;
 		}
 	}
+	private void drawFlower(int x, int y, Graphics2D graphics){
+		graphics.fill(new Rectangle(x+5, y+6, 1, 1));
+		graphics.setPaint(new Color(0, 130, 0));
+		graphics.fill(new Rectangle(x+5, y+7, 1, 2));
+	}
 	private void drawDoor(int x, int y, Graphics2D graphics, byte blockdata){
 		int orientation = 0;
 		int posx = x;
@@ -452,6 +463,14 @@ public class MagicMappingRenderer implements Runnable {
 							graphics.setPaint(new Color(255,255,0, 50));
 							drawOre(picx, picy, graphics, 30);
 						}
+						else if(blockType == Material.RED_ROSE){
+							graphics.setPaint(new Color(255,0,0));
+							drawFlower(picx, picy, graphics);
+						}
+						else if(blockType == Material.YELLOW_FLOWER){
+							graphics.setPaint(new Color(255,255,0));
+							drawFlower(picx, picy, graphics);
+						}
 						else if(blockType == Material.WOOL){
 							drawOutline( picx, picy, graphics, 1, block);
 							byte color = block.getData();
@@ -539,6 +558,12 @@ public class MagicMappingRenderer implements Runnable {
 							drawCube(picx, picy, graphics, 1);
 							drawShadow(picx, picy, graphics, 1);
 						}
+						else if(blockType == Material.LAPIS_BLOCK){
+							drawOutline(picx, picy, graphics, 1, block);
+							graphics.setPaint(new Color(40,40,255));
+							drawCube(picx, picy, graphics, 5);
+							drawShadow(picx, picy, graphics, 1);
+						}
 						else if(blockType == Material.DIAMOND_BLOCK){
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(100,255,255));
@@ -555,6 +580,14 @@ public class MagicMappingRenderer implements Runnable {
 							drawOutline(picx, picy, graphics, 1, block);
 							graphics.setPaint(new Color(255,230,46));
 							drawCube(picx, picy, graphics, 1);
+							drawShadow(picx, picy, graphics, 1);
+						}
+						else if(blockType == Material.LAPIS_ORE){
+							drawOutline(picx, picy, graphics, 1, block);
+							graphics.setPaint(new Color(100, 100, 100));
+							drawCube(picx, picy, graphics, 1);
+							graphics.setPaint(new Color(40,40,255));
+							drawOre(picx, picy, graphics, 5);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.DIAMOND_ORE){
@@ -634,8 +667,19 @@ public class MagicMappingRenderer implements Runnable {
 						}
 						else if(blockType == Material.LOG){
 							drawOutline(picx, picy, graphics, 1, block);
-							graphics.setPaint(new Color(120, 70, 0));
+							switch(block.getData()){
+							case 1: // Redwood
+								graphics.setPaint(new Color(59, 13, 0));
+								break;
+							case 2: // Birch
+								graphics.setPaint(new Color(222, 222, 222));
+								break;
+							default: // Generic
+								graphics.setPaint(new Color(120, 70, 0));
+								break;
+							}
 							drawCube(picx, picy, graphics, 1);
+							drawLogCircles(picx, picy, graphics);
 							drawShadow(picx, picy, graphics, 1);
 						}
 						else if(blockType == Material.STONE){
