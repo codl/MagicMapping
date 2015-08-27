@@ -414,7 +414,6 @@ public class MagicMappingRenderer implements Runnable {
 		for(int z=0; z<16; z++) {
 			for(int x=15; x>=0; x--){
 				for(int y=0; y<128; y++){
-					///System.out.println(String.valueOf(x)+" "+String.valueOf(y)+" "+String.valueOf(z));
 					Block block = chunk.getBlock(x, y, z);
 					if (x == 0 || z == 15 || isVisible(block)) {
 						Material blockType = block.getType();
@@ -833,10 +832,10 @@ public class MagicMappingRenderer implements Runnable {
 		while(true){
 			try {
 				while(!queue.isEmpty()){
-					try {
-			            Thread.sleep(1000);
-			        } catch (InterruptedException e) {
-			        }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
 					int[] pos = queue.poll();
 					try {
 						slowcounter = 0;
@@ -849,11 +848,10 @@ public class MagicMappingRenderer implements Runnable {
 		            Thread.sleep(1000);
 		        } catch (InterruptedException e) {
 		        }
-		        slowcounter++;
-			    if(!slowQueue.isEmpty() && slowcounter > 30){
+			    if(!slowQueue.isEmpty()){
 			        try {
-			        	slowcounter=0;
-						int[] pos = slowQueue.removeLast();
+						//int[] pos = slowQueue.removeLast();
+						int[] pos = slowQueue.poll();
 						Chunk chunk = this.plugin.world.getChunkAt(pos[0], pos[1]);
 						render(chunk);
 					} catch (NullPointerException e) {

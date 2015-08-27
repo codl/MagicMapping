@@ -29,7 +29,13 @@ public class MagicMappingPlayerListener extends PlayerListener {
     	Chunk chunk = l.getWorld().getChunkAt(l.getWorld().getBlockAt(x, 5, z));
     	int chunkx = chunk.getX();
     	int chunkz = chunk.getZ();
-        renderer.slowEnqueue(chunkx, chunkz);
+        for(int i = 0; i <= 2; i++){
+        	for(x = chunkx-i; x <= chunkx+i; x++){
+            	for(z = chunkz-i; z <= chunkz+i; z++){
+            		renderer.slowEnqueue(x, z);
+            	}
+        	}
+        }
     }
 }
 

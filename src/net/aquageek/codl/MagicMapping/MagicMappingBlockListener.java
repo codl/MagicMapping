@@ -38,9 +38,10 @@ public class MagicMappingBlockListener extends BlockListener {
     
     @Override
     public void onBlockPhysics(BlockPhysicsEvent event){
-    	Chunk chunk = event.getBlock().getChunk();
+    	/*Chunk chunk = event.getBlock().getChunk();
     	int chunkx = chunk.getX();
     	int chunkz = chunk.getZ();
-    	renderer.slowEnqueue(chunkx, chunkz);	
+    	renderer.slowEnqueue(chunkx, chunkz);
+    	*/	
     }
 }
